@@ -1,0 +1,1847 @@
+/* =============================================================================
+   PORTFOLIO STYLES
+   Sections in this file:
+     1. Design tokens (colors, spacing, radius)
+     2. Base / reset
+     3. Layout helpers (container, section)
+     4. Buttons
+     5. Background layers (grid + glow)
+     6. Header / navigation
+     7. Hero + code terminal
+     8. Section headings
+     9. About
+    10. Skills
+    11. Projects
+    12. Journey + Currently learning
+    13. Contact
+    14. Footer
+    15. Scroll reveal animation
+    16. Responsive (media queries)
+    17. Loading screen
+    18. Scroll progress bar
+    19. Custom cursor
+    20. Animated background blobs
+    21. Hero entrance (staggered)
+    22. Timeline reveal
+    23. Currently learning (subtle life)
+    24. Project card entrance + filter animation
+    25. Contact list stagger
+    26. Ripple + shared keyframes
+    27. Reduced motion
+   ========================================================================== */
+
+
+/* =============================================================================
+   1. DESIGN TOKENS
+   One accent color (electric violet). Dark theme is the default; the light
+   theme just overrides the same variables.
+   ========================================================================== */
+:root {
+  /* Colors – dark theme */
+  --bg: #0a0a0f;
+  --bg-elevated: #101018;
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  --text: #e8e8f0;
+  --text-dim: #9a9aab;
+  --text-faint: #6b6b7b;
+
+  --accent: #7c6cff;
+  --accent-strong: #9a8dff;
+  --accent-soft: rgba(124, 108, 255, 0.14);
+  --accent-glow: rgba(124, 108, 255, 0.35);
+
+  /* Spacing scale */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 5rem;
+
+  /* Sizing */
+  --container-width: 1120px;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --header-height: 68px;
+
+  /* Effects */
+  --transition: 220ms ease;
+  --shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.6);
+
+  /* Fonts */
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, "SF Mono", Menlo,
+    Consolas, monospace;
+}
+
+/* Light theme – overrides only what needs to change */
+[data-theme="light"] {
+  --bg: #f7f7fb;
+  --bg-elevated: #ffffff;
+  --surface: rgba(10, 10, 20, 0.02);
+  --surface-hover: rgba(10, 10, 20, 0.05);
+  --border: rgba(10, 10, 20, 0.1);
+  --border-strong: rgba(10, 10, 20, 0.2);
+
+  --text: #16161d;
+  --text-dim: #55556a;
+  --text-faint: #8a8a9c;
+
+  --accent: #5b4bde;
+  --accent-strong: #4636c9;
+  --accent-soft: rgba(91, 75, 222, 0.1);
+  --accent-glow: rgba(91, 75, 222, 0.25);
+
+  --shadow: 0 20px 45px -22px rgba(20, 20, 50, 0.25);
+}
+
+
+/* =============================================================================
+   2. BASE / RESET
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Keeps anchored sections below the fixed header */
+  scroll-padding-top: calc(var(--header-height) + 16px);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+/* Visible focus outline for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Skip link – hidden until focused */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1000;
+  padding: 0.6rem 1rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 0 0 8px 0;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+
+/* =============================================================================
+   3. LAYOUT HELPERS
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin-inline: auto;
+  padding-inline: var(--space-3);
+}
+
+.section {
+  padding-block: var(--space-6);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+
+/* =============================================================================
+   4. BUTTONS
+   ========================================================================== */
+.btn {
+  position: relative;
+  /* needed so the ripple span can be positioned inside */
+  overflow: hidden;
+  /* clips the ripple to the button shape */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+  transition: transform var(--transition), box-shadow var(--transition),
+    background-color var(--transition), border-color var(--transition);
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 8px 24px -8px var(--accent-glow);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-strong);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px -10px var(--accent-glow);
+}
+
+.btn-ghost {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px -6px var(--accent-glow);
+}
+
+/* Pressed state – comes after the :hover rules so it wins while clicking */
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* Small link-style button used on project cards */
+.btn-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  transition: border-color var(--transition), color var(--transition),
+    background-color var(--transition);
+}
+
+.btn-sm:hover:not([aria-disabled="true"]) {
+  border-color: var(--accent);
+  color: var(--accent);
+  background-color: var(--accent-soft);
+}
+
+.btn-sm[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+/* =============================================================================
+   5. BACKGROUND LAYERS (subtle grid + accent glow)
+   ========================================================================== */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px;
+  /* Fade the grid out toward the edges */
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%,
+      #000 20%,
+      transparent 75%);
+  opacity: 0.5;
+}
+
+.bg-glow {
+  position: absolute;
+  top: -240px;
+  left: 50%;
+  width: 620px;
+  height: 620px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+  filter: blur(40px);
+  opacity: 0.55;
+}
+
+
+/* =============================================================================
+   6. HEADER / NAVIGATION
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-elevated);
+  /* fallback for old browsers */
+  background-color: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition), background-color var(--transition);
+}
+
+/* .is-scrolled is added by JS once the page is scrolled a bit */
+.site-header.is-scrolled {
+  border-bottom-color: var(--border);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.logo-bracket {
+  color: var(--accent);
+}
+
+.logo-name {
+  color: var(--text);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.nav-link {
+  position: relative;
+  font-size: 0.92rem;
+  color: var(--text-dim);
+  transition: color var(--transition);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+
+.nav-link:hover {
+  color: var(--text);
+}
+
+/* Underline grows from left to right on hover (and stays for the active link) */
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.nav-link.is-active {
+  color: var(--text);
+}
+
+.nav-link.is-active::after {
+  transform: scaleX(1);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  font-size: 1rem;
+  transition: border-color var(--transition), color var(--transition),
+    transform var(--transition);
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: rotate(20deg);
+}
+
+/* Hamburger button – hidden on desktop */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+}
+
+.nav-toggle-bar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin-inline: auto;
+  background-color: var(--text);
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+/* Animate hamburger into an X when menu is open */
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* =============================================================================
+   7. HERO + CODE TERMINAL
+   ========================================================================== */
+.hero {
+  padding-block: var(--space-6) var(--space-6);
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.hero-hello {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  margin-bottom: var(--space-2);
+}
+
+.hero-wave {
+  display: inline-block;
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  background: linear-gradient(120deg, var(--text), var(--accent-strong));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: var(--space-3);
+}
+
+.hero-desc {
+  max-width: 46ch;
+  color: var(--text-dim);
+  margin-bottom: var(--space-4);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Terminal card */
+.terminal {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--bg-elevated);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.terminal-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: var(--text-faint);
+}
+
+.terminal-dot:nth-child(1) {
+  background-color: #ff5f57;
+}
+
+.terminal-dot:nth-child(2) {
+  background-color: #febc2e;
+}
+
+.terminal-dot:nth-child(3) {
+  background-color: #28c840;
+}
+
+.terminal-file {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-faint);
+}
+
+.terminal-body {
+  padding: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  line-height: 1.9;
+  color: var(--text);
+  overflow-x: auto;
+}
+
+/* Simple syntax-highlight colors (single accent + neutral tones) */
+.tok-key {
+  color: var(--accent-strong);
+}
+
+.tok-var {
+  color: var(--text);
+}
+
+.tok-prop {
+  color: #8ab4ff;
+}
+
+.tok-str {
+  color: #7ee0a8;
+}
+
+[data-theme="light"] .tok-prop {
+  color: #3b6fd6;
+}
+
+[data-theme="light"] .tok-str {
+  color: #1f9d57;
+}
+
+
+/* =============================================================================
+   8. SECTION HEADINGS
+   ========================================================================== */
+.section-head {
+  margin-bottom: var(--space-5);
+}
+
+.section-index {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+.section-title {
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  margin-top: 0.25rem;
+}
+
+.section-subtitle {
+  margin-top: var(--space-1);
+  color: var(--text-dim);
+  font-size: 0.98rem;
+}
+
+
+/* =============================================================================
+   9. ABOUT
+   ========================================================================== */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.about-text p+p {
+  margin-top: var(--space-2);
+}
+
+.about-text {
+  color: var(--text-dim);
+}
+
+.about-facts {
+  display: grid;
+  gap: 0.75rem;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--surface);
+}
+
+.about-facts li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.about-facts li:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.about-fact-label {
+  color: var(--text-faint);
+  font-size: 0.88rem;
+}
+
+.about-fact-value {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+
+/* =============================================================================
+   10. SKILLS
+   ========================================================================== */
+.skills-groups {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.skills-group-title {
+  font-size: 1.05rem;
+  margin-bottom: var(--space-2);
+  color: var(--text);
+}
+
+.skills-group-title::before {
+  content: "# ";
+  color: var(--accent);
+  font-family: var(--font-mono);
+}
+
+.skills-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.skill-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  transition: transform var(--transition), border-color var(--transition),
+    background-color var(--transition);
+}
+
+.skill-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent);
+  background-color: var(--surface-hover);
+  box-shadow: 0 14px 34px -16px var(--accent-glow);
+}
+
+.skill-card:hover .skill-level {
+  transform: scale(1.08);
+}
+
+.skill-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.skill-level {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  color: var(--text-dim);
+  transition: transform var(--transition);
+}
+
+/* Level colors – all derived from the single accent, just different strengths */
+.skill-level[data-level="comfortable"] {
+  color: var(--accent-strong);
+  border-color: var(--accent);
+  background-color: var(--accent-soft);
+}
+
+.skill-level[data-level="improving"] {
+  color: var(--accent);
+  border-color: var(--accent-soft);
+}
+
+
+/* =============================================================================
+   11. PROJECTS
+   ========================================================================== */
+.project-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: var(--space-4);
+}
+
+.filter-btn {
+  position: relative;
+  /* for the ripple */
+  overflow: hidden;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  color: var(--text-dim);
+  transition: color var(--transition), border-color var(--transition),
+    background-color var(--transition), transform var(--transition);
+}
+
+.filter-btn:active {
+  transform: scale(0.96);
+}
+
+.filter-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.filter-btn.is-active {
+  color: #fff;
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+[data-theme="light"] .filter-btn.is-active {
+  color: #fff;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--surface);
+  overflow: hidden;
+  transition: transform var(--transition), border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow);
+}
+
+/* Hidden by the filter */
+.project-card.is-hidden {
+  display: none;
+}
+
+.project-thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* keeps the zoomed image inside the rounded corners */
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  background: linear-gradient(135deg,
+      var(--accent-soft),
+      var(--surface-hover));
+  border-bottom: 1px solid var(--border);
+}
+
+.project-thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 450ms ease;
+}
+
+.project-card:hover .project-thumb img {
+  transform: scale(1.05);
+}
+
+/* Gradient overlay + label that fade in when the card is hovered/focused */
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.8rem;
+  background: linear-gradient(to top, rgba(6, 6, 12, 0.72), transparent 55%);
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.project-card:hover .project-overlay,
+.project-card:focus-within .project-overlay {
+  opacity: 1;
+}
+
+.project-overlay-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #fff;
+  transform: translateY(6px);
+  transition: transform 300ms ease;
+}
+
+.project-card:hover .project-overlay-label,
+.project-card:focus-within .project-overlay-label {
+  transform: translateY(0);
+}
+
+.project-badge {
+  position: absolute;
+  top: 0.7rem;
+  left: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.28rem 0.6rem;
+  border-radius: 999px;
+  background-color: var(--bg-elevated);
+  /* fallback for old browsers */
+  background-color: color-mix(in srgb, var(--bg) 70%, transparent);
+  border: 1px solid var(--border-strong);
+  color: var(--text-dim);
+  backdrop-filter: blur(4px);
+}
+
+.project-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: var(--space-3);
+  flex: 1;
+}
+
+.project-name {
+  font-size: 1.1rem;
+}
+
+.project-desc {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  flex: 1;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.project-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  background-color: var(--bg-elevated);
+}
+
+.project-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+
+/* =============================================================================
+   12. JOURNEY + CURRENTLY LEARNING
+   ========================================================================== */
+.journey-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.timeline {
+  position: relative;
+  padding-left: var(--space-4);
+}
+
+/* Vertical line */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: linear-gradient(var(--accent),
+      var(--accent-soft));
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: var(--space-4);
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+/* Dot */
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--space-4) + 1px);
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.timeline-item-future::before {
+  background-color: var(--bg);
+  border: 2px solid var(--accent);
+}
+
+.timeline-year {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-faint);
+}
+
+.timeline-text {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.timeline-item-future .timeline-text {
+  color: var(--accent);
+}
+
+.learning-card {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--surface);
+}
+
+.learning-title {
+  font-size: 1.05rem;
+  margin-bottom: var(--space-2);
+}
+
+.learning-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.learning-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.92rem;
+  color: var(--text-dim);
+}
+
+.learning-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  flex-shrink: 0;
+}
+
+
+/* =============================================================================
+   13. CONTACT
+   ========================================================================== */
+.contact-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+  max-width: 640px;
+}
+
+.contact-item a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 1.1rem 1.3rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  transition: transform var(--transition), border-color var(--transition),
+    background-color var(--transition);
+}
+
+.contact-item a:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  background-color: var(--surface-hover);
+  box-shadow: 0 16px 36px -18px var(--accent-glow);
+}
+
+.contact-label {
+  font-weight: 600;
+}
+
+.contact-arrow {
+  color: var(--accent);
+  transition: transform var(--transition);
+}
+
+.contact-item a:hover .contact-arrow {
+  transform: translateX(4px) scale(1.15);
+}
+
+
+/* =============================================================================
+   14. FOOTER
+   ========================================================================== */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding-block: var(--space-4);
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: 0.88rem;
+  color: var(--text-dim);
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.footer-links a {
+  color: var(--text-dim);
+  transition: color var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--accent);
+}
+
+
+/* =============================================================================
+   15. SCROLL REVEAL ANIMATION
+   Elements with .reveal start hidden; JS adds .is-visible when they enter view.
+   Add data-anim="fade-left" | "fade-right" | "scale" to change the direction.
+   ========================================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 550ms ease, transform 550ms ease;
+  will-change: opacity, transform;
+}
+
+.reveal[data-anim="fade-left"] {
+  transform: translateX(-40px);
+}
+
+.reveal[data-anim="fade-right"] {
+  transform: translateX(40px);
+}
+
+.reveal[data-anim="scale"] {
+  transform: scale(0.94);
+}
+
+/* Final visible state – listed last so it wins for every direction */
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+
+/* =============================================================================
+   16. RESPONSIVE
+   Breakpoints checked: 1440, 1024, 768, 375, 320
+   ========================================================================== */
+
+/* Tablet / small laptop */
+@media (max-width: 1024px) {
+
+  .hero-inner,
+  .about-grid,
+  .journey-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-inner {
+    gap: var(--space-4);
+  }
+
+  .skills-groups {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: show hamburger, stack the menu */
+@media (max-width: 768px) {
+  :root {
+    --space-6: 3.5rem;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-menu {
+    position: fixed;
+    inset: var(--header-height) 0 auto 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    background-color: var(--bg-elevated);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    /* Hidden state */
+    transform: translateY(-12px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform var(--transition), opacity var(--transition);
+  }
+
+  .nav-menu.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-link {
+    font-size: 1rem;
+  }
+
+  .skills-groups,
+  .projects-grid,
+  .contact-list {
+    grid-template-columns: 1fr;
+  }
+
+  .about-fact-value {
+    text-align: left;
+  }
+
+  .about-facts li {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Fewer / calmer background effects on small screens */
+  .bg-blob--2 {
+    display: none;
+  }
+
+  .bg-blob--1 {
+    animation: none;
+    opacity: 0.08;
+  }
+}
+
+/* Turn the custom cursor off on any touch device */
+@media (hover: none),
+(pointer: coarse) {
+
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 375px) {
+  .container {
+    padding-inline: var(--space-2);
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .hero-actions {
+    width: 100%;
+  }
+}
+
+
+/* =============================================================================
+   17. LOADING SCREEN
+   Shown once on first load, then JS adds .is-hidden and it fades away.
+   Only appears when JS is enabled (`.js` on <html>).
+   ========================================================================== */
+.loader {
+  display: none;
+}
+
+.js .loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg);
+  transition: opacity 450ms ease, visibility 450ms ease;
+}
+
+.loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader-text {
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 3.5vw, 1.5rem);
+  letter-spacing: 0.18em;
+  color: var(--text);
+}
+
+.loader-caret {
+  color: var(--accent);
+  animation: blink 1s ease-in-out infinite;
+}
+
+
+/* =============================================================================
+   18. SCROLL PROGRESS BAR (very thin, pinned to the top)
+   ========================================================================== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 200;
+  pointer-events: none;
+}
+
+.scroll-progress-bar {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  transition: width 120ms linear;
+}
+
+
+/* =============================================================================
+   19. CUSTOM CURSOR
+   A small dot + a larger ring follow the mouse. JS adds .has-cursor to <body>
+   only for real pointer devices without reduced motion.
+   ========================================================================== */
+.cursor-dot,
+.cursor-ring {
+  display: none;
+}
+
+.has-cursor .cursor-dot,
+.has-cursor .cursor-ring {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.has-cursor,
+.has-cursor a,
+.has-cursor button {
+  cursor: none;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  /* center it on the pointer */
+  background-color: var(--accent);
+}
+
+.cursor-ring {
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border: 1.5px solid var(--accent);
+  /* JS sets `transform` for position, so the grow effect uses `scale` instead */
+  transition: scale 200ms ease, opacity 200ms ease, background-color 200ms ease;
+}
+
+.cursor-ring.is-hover {
+  scale: 1.6;
+  background-color: var(--accent-soft);
+}
+
+
+/* =============================================================================
+   20. ANIMATED BACKGROUND BLOBS
+   Two big blurred circles that drift very slowly behind everything.
+   ========================================================================== */
+.bg-blob {
+  position: absolute;
+  width: 460px;
+  height: 460px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  filter: blur(90px);
+  opacity: 0.12;
+}
+
+.bg-blob--1 {
+  top: 8%;
+  left: -140px;
+  animation: drift-1 26s ease-in-out infinite alternate;
+}
+
+.bg-blob--2 {
+  right: -160px;
+  bottom: 4%;
+  opacity: 0.09;
+  animation: drift-2 34s ease-in-out infinite alternate;
+}
+
+@keyframes drift-1 {
+  to {
+    transform: translate(120px, 90px);
+  }
+}
+
+@keyframes drift-2 {
+  to {
+    transform: translate(-110px, -70px);
+  }
+}
+
+
+/* =============================================================================
+   21. HERO ENTRANCE (staggered on first load)
+   Elements are hidden while JS is present, then animate in once <body> gets
+   .is-loaded. Each element picks its own delay with the --delay variable.
+   ========================================================================== */
+.js .hero-item {
+  opacity: 0;
+}
+
+/* `backwards` fill keeps the "hidden" look only DURING the delay, not after –
+   so the plain `opacity: 1` below takes over once the animation finishes and
+   later effects (like the mouse parallax on the terminal) are free to move it. */
+.is-loaded .hero-item {
+  opacity: 1;
+  animation: fade-up 700ms ease backwards;
+  animation-delay: var(--delay, 0ms);
+}
+
+.is-loaded .hero-item--right {
+  animation-name: slide-in-right;
+}
+
+/* Header logo + nav items drop down on load */
+.js .logo,
+.js .nav-menu>li {
+  opacity: 0;
+}
+
+.is-loaded .logo {
+  opacity: 1;
+  animation: fade-down 600ms ease backwards;
+}
+
+.is-loaded .nav-menu>li {
+  opacity: 1;
+  animation: fade-down 600ms ease backwards;
+}
+
+.is-loaded .nav-menu>li:nth-child(1) {
+  animation-delay: 40ms;
+}
+
+.is-loaded .nav-menu>li:nth-child(2) {
+  animation-delay: 80ms;
+}
+
+.is-loaded .nav-menu>li:nth-child(3) {
+  animation-delay: 120ms;
+}
+
+.is-loaded .nav-menu>li:nth-child(4) {
+  animation-delay: 160ms;
+}
+
+.is-loaded .nav-menu>li:nth-child(5) {
+  animation-delay: 200ms;
+}
+
+.is-loaded .nav-menu>li:nth-child(6) {
+  animation-delay: 240ms;
+}
+
+.is-loaded .nav-menu>li:nth-child(7) {
+  animation-delay: 280ms;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+
+/* =============================================================================
+   22. TIMELINE REVEAL
+   When .timeline gets .is-visible (from the scroll-reveal observer) the accent
+   line fills top-to-bottom, dots pop in, and items slide in one by one.
+   ========================================================================== */
+.timeline::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background-color: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1000ms ease 100ms;
+}
+
+.timeline.is-visible::after {
+  transform: scaleY(1);
+}
+
+.timeline .timeline-item {
+  opacity: 0;
+  transform: translateX(-14px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.timeline .timeline-item:nth-child(even) {
+  transform: translateX(14px);
+}
+
+.timeline .timeline-item::before {
+  transform: scale(0);
+  transition: transform 400ms ease;
+}
+
+.timeline.is-visible .timeline-item {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.timeline.is-visible .timeline-item::before {
+  transform: scale(1);
+}
+
+.timeline.is-visible .timeline-item:nth-child(1),
+.timeline.is-visible .timeline-item:nth-child(1)::before {
+  transition-delay: 200ms;
+}
+
+.timeline.is-visible .timeline-item:nth-child(2),
+.timeline.is-visible .timeline-item:nth-child(2)::before {
+  transition-delay: 350ms;
+}
+
+.timeline.is-visible .timeline-item:nth-child(3),
+.timeline.is-visible .timeline-item:nth-child(3)::before {
+  transition-delay: 500ms;
+}
+
+.timeline.is-visible .timeline-item:nth-child(4),
+.timeline.is-visible .timeline-item:nth-child(4)::before {
+  transition-delay: 650ms;
+}
+
+.timeline.is-visible .timeline-item:nth-child(5),
+.timeline.is-visible .timeline-item:nth-child(5)::before {
+  transition-delay: 800ms;
+}
+
+.timeline.is-visible .timeline-item:nth-child(6),
+.timeline.is-visible .timeline-item:nth-child(6)::before {
+  transition-delay: 950ms;
+}
+
+
+/* =============================================================================
+   23. CURRENTLY LEARNING (subtle life)
+   The title gets an animated "..." and each dot pulses on its own beat.
+   ========================================================================== */
+.learning-title::after {
+  content: "";
+  color: var(--accent);
+  animation: ellipsis 2.4s linear infinite;
+}
+
+@keyframes ellipsis {
+  0% {
+    content: "";
+  }
+
+  25% {
+    content: ".";
+  }
+
+  50% {
+    content: "..";
+  }
+
+  75% {
+    content: "...";
+  }
+
+  100% {
+    content: "";
+  }
+}
+
+.learning-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.learning-list li:nth-child(1) .learning-dot {
+  animation-delay: 0s;
+}
+
+.learning-list li:nth-child(2) .learning-dot {
+  animation-delay: 0.3s;
+}
+
+.learning-list li:nth-child(3) .learning-dot {
+  animation-delay: 0.6s;
+}
+
+.learning-list li:nth-child(4) .learning-dot {
+  animation-delay: 0.9s;
+}
+
+.learning-list li:nth-child(5) .learning-dot {
+  animation-delay: 1.2s;
+}
+
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--accent-soft);
+  }
+
+  50% {
+    transform: scale(1.35);
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+
+/* =============================================================================
+   24. PROJECT CARD ENTRANCE + FILTER ANIMATION
+   `backwards` fill-mode means the final state is NOT kept after the animation,
+   so the :hover lift keeps working once the card has appeared.
+   ========================================================================== */
+/* The grid itself fades in (.reveal). Once it is visible the cards run their
+   staggered entrance. The filter replays this same animation (see script.js). */
+.projects-grid.is-visible .project-card {
+  animation: card-in 450ms ease backwards;
+}
+
+.projects-grid.is-visible .project-card:nth-child(1) {
+  animation-delay: 60ms;
+}
+
+.projects-grid.is-visible .project-card:nth-child(2) {
+  animation-delay: 140ms;
+}
+
+.projects-grid.is-visible .project-card:nth-child(3) {
+  animation-delay: 220ms;
+}
+
+.projects-grid.is-visible .project-card:nth-child(4) {
+  animation-delay: 300ms;
+}
+
+.projects-grid.is-visible .project-card:nth-child(5) {
+  animation-delay: 380ms;
+}
+
+.projects-grid.is-visible .project-card:nth-child(6) {
+  animation-delay: 460ms;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+/* =============================================================================
+   25. CONTACT LIST STAGGER
+   ========================================================================== */
+.contact-list .contact-item {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.contact-list.is-visible .contact-item {
+  opacity: 1;
+  transform: none;
+}
+
+.contact-list.is-visible .contact-item:nth-child(1) {
+  transition-delay: 100ms;
+}
+
+.contact-list.is-visible .contact-item:nth-child(2) {
+  transition-delay: 200ms;
+}
+
+.contact-list.is-visible .contact-item:nth-child(3) {
+  transition-delay: 300ms;
+}
+
+.contact-list.is-visible .contact-item:nth-child(4) {
+  transition-delay: 400ms;
+}
+
+
+/* =============================================================================
+   26. RIPPLE (click feedback) + SHARED KEYFRAMES
+   ========================================================================== */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: currentColor;
+  opacity: 0.3;
+  transform: scale(0);
+  animation: ripple 600ms ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(3.5);
+    opacity: 0;
+  }
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Blinking caret after the hero terminal code (stays through the typing effect) */
+.terminal-body code::after {
+  content: "|";
+  margin-left: 2px;
+  color: var(--accent);
+  animation: blink 1.1s ease-in-out infinite;
+}
+
+
+/* =============================================================================
+   27. REDUCED MOTION
+   If the user asked the system for less motion, drop almost everything and
+   show the final state straight away. The site stays fully usable.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  /* Force anything that animates in to its visible end state */
+  .reveal,
+  .js .hero-item,
+  .js .logo,
+  .js .nav-menu>li,
+  .timeline .timeline-item,
+  .contact-list .contact-item {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .timeline::after {
+    transform: scaleY(1) !important;
+  }
+
+  .timeline .timeline-item::before {
+    transform: scale(1) !important;
+  }
+
+  /* Stop decorative loops */
+  .bg-blob,
+  .learning-dot,
+  .loader-caret,
+  .terminal-body code::after {
+    animation: none !important;
+  }
+
+  .learning-title::after {
+    content: "" !important;
+  }
+
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
+}
