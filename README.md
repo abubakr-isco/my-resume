@@ -20,7 +20,6 @@ the only place you normally need to touch:
 | `contact.email` | Your real email | ✅ set |
 | `contact.github` | `https://github.com/YOUR_USERNAME` | ✅ set (`abubakrbahronov-creator`) |
 | `contact.telegram` | `https://t.me/YOUR_USERNAME` | ✅ set (`isco_lancaster`) |
-| `contact.linkedin` | `https://linkedin.com/in/YOUR_USERNAME` | ⬜ still `USERNAME` |
 | `projects[...]` | Your real project titles, links and descriptions | ⬜ demo data |
 
 Then update these too:

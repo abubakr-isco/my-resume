@@ -31,14 +31,13 @@ const CONFIG = {
   fullName: "Abubakr",
 
   // City – shown in the About facts list
-  location: "[YOUR CITY]",
+  location: "Samarkand",
 
-  // Contact links. LinkedIn is still a placeholder — replace USERNAME there.
+  // Contact links (no LinkedIn — not used on this portfolio).
   contact: {
     email: "abubakrbahronov@gmail.com",
     github: "https://github.com/abubakrbahronov-creator",
     telegram: "https://t.me/isco_lancaster",
-    linkedin: "https://linkedin.com/in/USERNAME",
   },
 
   // Project cards. category is used by the filter buttons: "frontend" or "backend".
@@ -133,7 +132,6 @@ function applyConfig() {
   if (footerLinks) {
     footerLinks.innerHTML = `
       <li><a href="${CONFIG.contact.github}" target="_blank" rel="noopener">GitHub</a></li>
-      <li><a href="${CONFIG.contact.linkedin}" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a href="${CONFIG.contact.telegram}" target="_blank" rel="noopener">Telegram</a></li>
     `;
   }
@@ -155,10 +153,6 @@ function renderContact() {
     {
       label: "Telegram",
       href: CONFIG.contact.telegram
-    },
-    {
-      label: "LinkedIn",
-      href: CONFIG.contact.linkedin
     },
   ];
 
