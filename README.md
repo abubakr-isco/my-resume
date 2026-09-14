@@ -212,6 +212,22 @@ Everything is wrapped by `@media (prefers-reduced-motion: reduce)` (section 27).
 If the visitor turned off animations in their OS, the site jumps straight to the
 final state and the custom cursor is disabled — it stays fully usable.
 
+### Mobile polish
+
+A few things specifically for phones/tablets, all in `css/style.css`:
+
+- **No "stuck" hover** — `@media (hover: none), (pointer: coarse)` turns off the
+  lift/zoom/glow hover effects on cards, so a tap doesn't leave a card looking
+  permanently "hovered" the way it can on touchscreens.
+- **44px tap targets** — the hamburger and theme-toggle buttons, and nav links
+  on mobile, meet the ~44px minimum comfortable touch size.
+- **`touch-action: manipulation`** on every link/button removes the old
+  tap-delay and double-tap-to-zoom some mobile browsers still add.
+- **Smaller code font on very small phones** (≤375px) so the hero terminal
+  needs less side-scrolling.
+- Background blobs are reduced to one, un-animated, on phones — one less thing
+  moving on a small battery-powered screen.
+
 ---
 
 ## Ideas for next improvements

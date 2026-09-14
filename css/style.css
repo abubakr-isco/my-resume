@@ -159,6 +159,13 @@ button {
   color: inherit;
 }
 
+/* Removes the ~300ms tap delay some mobile browsers add before a click,
+   and stops double-tap-to-zoom on things meant to be tapped once. */
+a,
+button {
+  touch-action: manipulation;
+}
+
 /* Visible focus outline for keyboard users */
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -415,8 +422,8 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 44px; /* 44px is the minimum comfortable tap target on a touchscreen */
+  height: 44px;
   border-radius: 50%;
   border: 1px solid var(--border-strong);
   font-size: 1rem;
@@ -436,8 +443,8 @@ button {
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  width: 42px;
-  height: 42px;
+  width: 44px; /* 44px is the minimum comfortable tap target on a touchscreen */
+  height: 44px;
   border-radius: 10px;
   border: 1px solid var(--border-strong);
 }
@@ -1211,12 +1218,25 @@ button {
 
   .nav-link {
     font-size: 1rem;
+    /* taller tap area on touchscreens, without changing how it looks */
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 
   .skills-groups,
   .projects-grid,
   .contact-list {
     grid-template-columns: 1fr;
+  }
+
+  /* A little more breathing room around small tap targets on phones */
+  .filter-btn {
+    padding: 0.6rem 1.1rem;
+  }
+
+  .btn-sm {
+    padding: 0.65rem 1rem;
   }
 
   .about-fact-value {
@@ -1244,18 +1264,39 @@ button {
   }
 }
 
-/* Turn the custom cursor off on any touch device */
-@media (hover: none),
-(pointer: coarse) {
-
+/* Devices without a real hover (phones, tablets) */
+@media (hover: none), (pointer: coarse) {
   .cursor-dot,
   .cursor-ring {
     display: none !important;
+  }
+
+  /* Without this, tapping a card can leave it looking "stuck" in its hover
+     state (lifted, glowing, zoomed) until the visitor taps somewhere else,
+     because touchscreens don't un-hover the way a mouse does. */
+  .skill-card:hover,
+  .project-card:hover,
+  .contact-item a:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .skill-card:hover .skill-level,
+  .project-card:hover .project-thumb img,
+  .contact-item a:hover .contact-arrow {
+    transform: none;
+  }
+  .project-card:hover .project-overlay,
+  .project-card:hover .project-overlay-label {
+    opacity: 0;
   }
 }
 
 /* Very small phones */
 @media (max-width: 375px) {
+  :root {
+    --space-6: 2.75rem; /* less empty space between sections on short screens */
+  }
+
   .container {
     padding-inline: var(--space-2);
   }
@@ -1266,6 +1307,17 @@ button {
 
   .hero-actions {
     width: 100%;
+  }
+
+  /* Smaller code font so most lines fit without side-scrolling the terminal */
+  .terminal-body {
+    padding: var(--space-2);
+    font-size: 0.74rem;
+    line-height: 1.75;
+  }
+
+  .contact-list {
+    max-width: 100%;
   }
 }
 
