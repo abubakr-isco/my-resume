@@ -1,4 +1,4 @@
-# Personal Portfolio — Junior Frontend Developer
+# Personal Portfolio — Frontend Developer
 
 A modern, minimalist, dark-themed personal portfolio built with plain
 **HTML5, CSS3 and JavaScript (ES6+)** — no frameworks, no build step.

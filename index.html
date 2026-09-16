@@ -6,16 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- ===== SEO ===== -->
-  <title>Abubakr — Junior Frontend Developer</title>
-  <meta name="description" content="Junior Frontend Developer learning HTML, CSS, JavaScript, Python and Django." />
+  <title>Abubakr — Frontend Developer</title>
+  <meta name="description" content="Frontend Developer learning HTML, CSS, JavaScript, Python and Django." />
   <meta name="author" content="Abubakr" />
   <meta name="theme-color" content="#0a0a0f" />
 
   <!-- ===== Open Graph (basic) ===== -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Abubakr — Junior Frontend Developer" />
+  <meta property="og:title" content="Abubakr — Frontend Developer" />
   <meta property="og:description"
-    content="Junior Frontend Developer learning HTML, CSS, JavaScript, Python and Django." />
+    content="Frontend Developer learning HTML, CSS, JavaScript, Python and Django." />
   <meta property="og:url" content="https://USERNAME.github.io/portfolio/" />
   <meta property="og:image" content="assets/images/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -99,7 +99,7 @@
             <span class="accent" data-config="fullName">Abubakr</span>
           </p>
           <h1 class="hero-title hero-item" style="--delay: 160ms">
-            Junior Frontend Developer
+            Frontend Developer
           </h1>
           <p class="hero-desc hero-item" style="--delay: 240ms">
             I build clean, responsive and interactive websites with HTML, CSS and
@@ -122,7 +122,7 @@
             <span class="terminal-file">developer.js</span>
           </div>
           <pre class="terminal-body"><code><span class="tok-key">const</span> <span class="tok-var">developer</span> = {
-  <span class="tok-prop">role</span>: <span class="tok-str">"Junior Frontend Developer"</span>,
+  <span class="tok-prop">role</span>: <span class="tok-str">"Frontend Developer"</span>,
   <span class="tok-prop">skills</span>: [<span class="tok-str">"HTML"</span>, <span class="tok-str">"CSS"</span>, <span class="tok-str">"JavaScript"</span>],
   <span class="tok-prop">learning</span>: [<span class="tok-str">"Python"</span>, <span class="tok-str">"Django"</span>],
   <span class="tok-prop">goal</span>: <span class="tok-str">"Full-Stack Developer"</span>
@@ -142,7 +142,7 @@
         <div class="about-grid">
           <div class="about-text reveal" data-anim="fade-left">
             <p>
-              I'm a beginner Frontend Developer learning how to build modern
+              I'm a Frontend Developer learning how to build modern
               websites. I'm confidently working through HTML, CSS and JavaScript,
               and I enjoy turning designs into clean, responsive interfaces.
             </p>
@@ -265,6 +265,9 @@
 
         <!-- Filter buttons -->
         <div class="project-filters reveal" role="group" aria-label="Filter projects">
+          <!-- Slides behind the active button (see .filter-pill in style.css
+               and setupProjectFilter() in script.js) -->
+          <span class="filter-pill" id="filterPill" aria-hidden="true"></span>
           <button class="filter-btn is-active" data-filter="all">All</button>
           <button class="filter-btn" data-filter="frontend">Frontend</button>
           <button class="filter-btn" data-filter="javascript">JavaScript</button>
@@ -310,7 +313,7 @@
             </li>
             <li class="timeline-item timeline-item-future">
               <span class="timeline-year">Future</span>
-              <p class="timeline-text">Junior Frontend → Full-Stack Developer</p>
+              <p class="timeline-text">Frontend → Full-Stack Developer</p>
             </li>
           </ol>
 

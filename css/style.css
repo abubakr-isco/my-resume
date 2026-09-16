@@ -71,6 +71,10 @@
   /* Effects */
   --transition: 220ms ease;
   --shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.6);
+  /* A "springy" custom easing curve (y1 > 1 means it overshoots the target,
+     then settles back) — used for the filter pill below. Try it yourself at
+     https://animejs.com/documentation/easings/cubic-bezier-easing */
+  --ease-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Fonts */
   --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -760,14 +764,34 @@ button {
    11. PROJECTS
    ========================================================================== */
 .project-filters {
+  position: relative; /* the pill below is positioned relative to this */
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
   margin-bottom: var(--space-4);
 }
 
+/* The little accent pill that slides behind whichever filter is active.
+   JS (setupProjectFilter in script.js) sets its width/height/position to
+   match the clicked button; this transition is what makes it glide there
+   with a small springy overshoot instead of just snapping into place. */
+.filter-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 999px;
+  background-color: var(--accent);
+  pointer-events: none;
+  z-index: 0;
+}
+.filter-pill--ready {
+  transition: transform 550ms var(--ease-overshoot),
+    width 550ms var(--ease-overshoot), height 550ms var(--ease-overshoot);
+}
+
 .filter-btn {
   position: relative;
+  z-index: 1; /* stays above the pill so its label is always readable */
   /* for the ripple */
   overflow: hidden;
   padding: 0.45rem 1rem;
@@ -791,8 +815,8 @@ button {
 
 .filter-btn.is-active {
   color: #fff;
-  background-color: var(--accent);
-  border-color: var(--accent);
+  /* no background here on purpose — the sliding .filter-pill supplies it */
+  border-color: transparent;
 }
 
 [data-theme="light"] .filter-btn.is-active {

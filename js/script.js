@@ -223,7 +223,23 @@ function renderProjects() {
 // --- Project filter buttons ---------------------------------------------------
 function setupProjectFilter() {
   const buttons = $all(".filter-btn");
+  const pill = $("#filterPill");
   if (buttons.length === 0) return;
+
+  // Move + resize the pill so it exactly covers the given button.
+  // Uses offsetLeft/offsetTop (not translateX-only) so it still lines up
+  // correctly if the buttons wrap onto a second line on a narrow screen.
+  function movePillTo(button) {
+    if (!pill || !button) return;
+    pill.style.width = button.offsetWidth + "px";
+    pill.style.height = button.offsetHeight + "px";
+    pill.style.transform = `translate(${button.offsetLeft}px, ${button.offsetTop}px)`;
+  }
+
+  // Place the pill under the current "All" button first, with no transition
+  // yet — otherwise it would visibly slide in from the corner on page load.
+  movePillTo(buttons.find((b) => b.classList.contains("is-active")));
+  requestAnimationFrame(() => pill && pill.classList.add("filter-pill--ready"));
 
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -232,6 +248,7 @@ function setupProjectFilter() {
       // Update active button
       buttons.forEach((b) => b.classList.remove("is-active"));
       button.classList.add("is-active");
+      movePillTo(button);
 
       // Show / hide cards, and replay the entrance animation for the ones shown
       $all(".project-card").forEach((card) => {
@@ -242,6 +259,12 @@ function setupProjectFilter() {
         if (show) restartAnimation(card);
       });
     });
+  });
+
+  // Re-align the pill if the layout changes (e.g. phone rotated), without
+  // relying on the click handler above
+  window.addEventListener("resize", () => {
+    movePillTo(buttons.find((b) => b.classList.contains("is-active")));
   });
 }
 
