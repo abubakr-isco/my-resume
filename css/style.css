@@ -1869,6 +1869,92 @@ button {
 
 
 /* =============================================================================
+   28. DESIGN POLISH
+   Small visual upgrades layered on top of the base styles above.
+   ========================================================================== */
+
+/* Softer, more premium type rhythm */
+.hero-title {
+  font-size: clamp(2.4rem, 6.5vw, 4.2rem);
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.hero-desc {
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.section-title {
+  letter-spacing: -0.03em;
+}
+
+/* Section index gets a small line so headings feel anchored */
+.section-index {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  letter-spacing: 0.08em;
+}
+
+.section-index::after {
+  content: "";
+  width: 32px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+/* Primary button: subtle top-light gradient for depth */
+.btn-primary {
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.16),
+    rgba(255, 255, 255, 0) 60%
+  );
+}
+
+/* Cards: soft glass look with a top highlight */
+.skill-card,
+.project-card {
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0) 45%
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .skill-card,
+[data-theme="light"] .project-card {
+  background-image: none;
+  background-color: var(--bg-elevated);
+  box-shadow: 0 1px 2px rgba(20, 20, 50, 0.05);
+}
+
+.project-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow), 0 0 40px -18px var(--accent-glow);
+}
+
+/* Terminal: gentle glow so it feels like the hero's focal point */
+.terminal {
+  box-shadow: var(--shadow), 0 0 80px -30px var(--accent-glow);
+}
+
+/* Nicer text selection */
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Thin themed scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+
+/* =============================================================================
    27. REDUCED MOTION
    If the user asked the system for less motion, drop almost everything and
    show the final state straight away. The site stays fully usable.
