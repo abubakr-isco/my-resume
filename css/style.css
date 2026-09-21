@@ -2008,3 +2008,125 @@ html {
     display: none !important;
   }
 }
+
+/* =============================================================================
+   29. DESIGN REFRESH (specs/001-design-refresh)
+   CSS-only upgrades: depth, skill meters, consistent card highlight,
+   better focus rings. Appended last so it overrides earlier rules.
+   ========================================================================== */
+
+/* --- Hero: soft glow behind the terminal + shimmering title --- */
+.terminal {
+  box-shadow: 0 30px 80px -30px var(--accent-glow), var(--shadow);
+  border-color: var(--border-strong);
+}
+
+.hero-title {
+  background-size: 200% 100%;
+  animation: title-shimmer 8s ease-in-out infinite alternate;
+}
+
+@keyframes title-shimmer {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
+}
+
+/* --- Buttons: gradient fill + glow on the primary action --- */
+.btn-primary {
+  background-image: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 10px 30px -10px var(--accent-glow);
+  transition: transform var(--transition), box-shadow var(--transition),
+    filter var(--transition);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px -10px var(--accent-glow);
+  filter: brightness(1.08);
+}
+
+/* --- Nav: active link becomes a small pill --- */
+.nav-link {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+}
+
+.nav-link::after {
+  display: none; /* replaced by the pill background */
+}
+
+.nav-link:hover,
+.nav-link.is-active {
+  background-color: var(--accent-soft);
+  color: var(--text);
+}
+
+/* --- Cards: one shared top-edge highlight so everything feels related --- */
+.skill-card,
+.project-card,
+.learning-card,
+.about-facts {
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--accent) 7%, transparent),
+    transparent 60%
+  );
+}
+
+.project-card:hover,
+.learning-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 24px 50px -24px var(--accent-glow);
+}
+
+/* --- Skill level meter: 3 small bars drawn with a pseudo-element --- */
+.skill-level {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skill-level::before {
+  content: "";
+  width: 22px;
+  height: 6px;
+  border-radius: 3px;
+  /* --meter = how much of the bar is filled (set per level below) */
+  background: linear-gradient(
+    90deg,
+    var(--accent) var(--meter),
+    var(--border-strong) var(--meter)
+  );
+}
+
+.skill-level                           { --meter: 33%; }
+.skill-level[data-level="basic"]       { --meter: 33%; }
+.skill-level[data-level="learning"]    { --meter: 33%; }
+.skill-level[data-level="improving"]   { --meter: 66%; }
+.skill-level[data-level="comfortable"] { --meter: 100%; }
+
+/* --- Focus: clearer ring with soft halo --- */
+:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--accent-soft);
+}
+
+/* --- Footer: subtle top glow line --- */
+.site-footer {
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(90deg, transparent, var(--accent), transparent) 1;
+}
+
+/* --- Small screens: keep pills compact --- */
+@media (max-width: 768px) {
+  .nav-link {
+    padding: 0.6rem 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title {
+    animation: none;
+  }
+}
