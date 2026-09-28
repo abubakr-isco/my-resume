@@ -43,15 +43,15 @@ const CONFIG = {
   // Project cards. category is used by the filter buttons: "frontend" or "backend".
   // status: "live" shows working buttons, "coming-soon" disables the Live Demo button.
   projects: [{
-      title: "Responsive Landing Page",
-      type: "Practice Project",
+      title: "Mercedes-Benz Samarkand",
+      type: "Team Project",
       category: "frontend",
-      status: "live",
-      description: "A modern, fully responsive landing page built from scratch to practice layout, Flexbox, Grid and media queries.",
+      status: "coming-soon",
+      description: "A multi-page dealership website: home page, model range (E-Class, GLE, CLE, S-Class), an interactive car configurator and a contacts page.",
       tech: ["HTML", "CSS", "JavaScript"],
       image: "", // e.g. "assets/images/landing-page.png" (leave "" to show a placeholder)
-      github: "https://github.com/abubakrbahronov-creator/responsive-landing-page",
-      demo: "https://abubakrbahronov-creator.github.io/responsive-landing-page/",
+      github: "https://github.com/Shaxzod777/team-k",
+      demo: "",
     },
     {
       title: "JavaScript Mini App",
